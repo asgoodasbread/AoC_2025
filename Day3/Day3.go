@@ -49,27 +49,39 @@ func getSec(x string) (int, int) {
 }
 
 func part_2() {
-	input := utils.ReadInputSep("Day3/test_input.txt", ",")
-	digs := make([]int, 12)
+	input := utils.ReadInputSep("Day3/day3_input.txt", ",")
+	res := 0
 	for _, x := range input {
-		for i := 0; i < 12; i++ {
-			findMax(x, i, digs, i)
+		nums := make([]int, 0, len(x))
+		nums = get_nums(nums, x)
+		//fmt.Println(nums)
+		stack := make([]int, 0, 12)
+		skips := len(nums) - 12
+		for _, current := range nums {
+			for len(stack) > 0 && current > stack[len(stack)-1] && skips > 0 {
+				//pop the top
+				stack = stack[:len(stack)-1]
+				skips--
+			}
+			stack = append(stack, current)
 		}
-		fmt.Println(digs)
+		//fmt.Println(stack[:len(stack)-skips])
+		res += convertToInt(stack[:len(stack)-skips])
 	}
+	fmt.Println(res)
 }
 
-func findMax(x string, maxIndex int, digs []int, curDig int) {
-	if maxIndex == len(x) {
-		return
+func get_nums(stack []int, s string) []int {
+	for _, x := range s {
+		stack = append(stack, int(x-'0'))
 	}
-	max := -1
-	for i := maxIndex; i < len(x)-1; i++ {
-		digit := int(x[i] - '0')
-		if digit > max {
-			max = digit
-		}
-	}
-	digs[curDig] = max
+	return stack
+}
 
+func convertToInt(x []int) int {
+	res := 0
+	for _, elem := range x {
+		res = (res * 10) + elem
+	}
+	return res
 }
