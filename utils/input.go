@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"bufio"
 	"log"
 	"os"
 	"strconv"
@@ -28,6 +29,25 @@ func Atoi(s string) int {
 		log.Fatalf("Error converting '%s' to int: %v", s, err)
 	}
 	return val
+}
+
+func ReadAsGrid(file_name string) [][]rune {
+	var grid [][]rune
+	file, err := os.Open(file_name)
+	if err != nil {
+		log.Panicln("Error opening file !")
+	}
+	defer file.Close()
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := scanner.Text()
+		var grid_line []rune
+		for _, c := range line {
+			grid_line = append(grid_line, rune(c))
+		}
+		grid = append(grid, grid_line)
+	}
+	return grid
 }
 
 // func main() {
