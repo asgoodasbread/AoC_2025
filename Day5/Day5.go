@@ -59,7 +59,7 @@ func part_2() {
 func part_1() {
 	id_ranges, ids := utils.ReadDay5("Day5/day5_input.txt")
 	//Parse id ranges as intervals
-	id_range_intervals := make([]Interval, 0)
+	id_range_intervals := make([]Interval, 0, len(id_ranges))
 	res := 0
 	for _, ran := range id_ranges {
 		parts := strings.Split(ran, "-")

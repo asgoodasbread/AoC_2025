@@ -17,7 +17,7 @@ func main() {
 }
 
 func part_2() {
-	input_grid := utils.ReadAsGrid("Day4/test_input.txt")
+	input_grid := utils.ReadAsGrid("Day4/day4_input.txt")
 	fmt.Println(reduce_grid(input_grid))
 }
 
