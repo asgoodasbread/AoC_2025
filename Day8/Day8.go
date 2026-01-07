@@ -15,23 +15,53 @@ type Jbox struct {
 
 func main() {
 	part_1()
-	fmt.Println()
+	part_2()
+}
+func part_2() {
+	input := utils.ReadInputSep("Day8/day8_input.txt", ",")
+	jboxes := parseInput(input)
+	boxDist := make(map[[2]int]float64, 0)
+	for i := 0; i < len(jboxes)-1; i++ {
+		for j := i + 1; j < len(jboxes); j++ {
+			boxDist[[2]int{i, j}] = calculateDistance(jboxes[i], jboxes[j])
+		}
+	}
+
+	sortedEdges := make([][2]int, 0, len(boxDist))
+
+	for edge := range boxDist {
+		sortedEdges = append(sortedEdges, [2]int{edge[0], edge[1]})
+	}
+
+	sort.Slice(sortedEdges, func(i, j int) bool {
+		return boxDist[sortedEdges[i]] < boxDist[sortedEdges[j]]
+	})
+
+	//Create parents and initialize
+	parents := make([]int, len(jboxes))
+	for i := range len(jboxes) {
+		parents[i] = i
+	}
+
+	circuits := len(jboxes)
+	//1000 shortest distances
+	for _, edge := range sortedEdges {
+		if findRoot(edge[0], parents) == findRoot(edge[1], parents) {
+			continue
+		}
+		union(edge[0], edge[1], parents)
+		circuits -= 1
+		if circuits == 1 {
+			fmt.Println(jboxes[edge[0]].x * jboxes[edge[1]].x)
+			break
+		}
+	}
+
 }
 
 func part_1() {
 	input := utils.ReadInputSep("Day8/day8_input.txt", ",")
-	var jboxes []Jbox
-
-	//Parse input into structs
-	for i := 0; i < len(input); i += 3 {
-		myJbox := Jbox{
-			x: utils.Atoi(input[i]),
-			y: utils.Atoi(input[i+1]),
-			z: utils.Atoi(input[i+2]),
-		}
-		jboxes = append(jboxes, myJbox)
-	}
-
+	jboxes := parseInput(input)
 	boxDist := make(map[[2]int]float64, 0)
 	for i := 0; i < len(jboxes)-1; i++ {
 		for j := i + 1; j < len(jboxes); j++ {
@@ -78,6 +108,21 @@ func part_1() {
 
 	fmt.Println(sortedGroupSizes[0] * sortedGroupSizes[1] * sortedGroupSizes[2])
 
+}
+
+func parseInput(input []string) []Jbox {
+	var jboxes []Jbox
+
+	//Parse input into structs
+	for i := 0; i < len(input); i += 3 {
+		myJbox := Jbox{
+			x: utils.Atoi(input[i]),
+			y: utils.Atoi(input[i+1]),
+			z: utils.Atoi(input[i+2]),
+		}
+		jboxes = append(jboxes, myJbox)
+	}
+	return jboxes
 }
 
 func findRoot(i int, parents []int) int {
