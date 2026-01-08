@@ -17,6 +17,7 @@ func main() {
 	part_1()
 	part_2()
 }
+
 func part_2() {
 	input := utils.ReadInputSep("Day8/day8_input.txt", ",")
 	jboxes := parseInput(input)
