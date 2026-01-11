@@ -8,6 +8,32 @@ import (
 	"strings"
 )
 
+func ReadDay10(file_name string) [][]string {
+	var res [][]string
+	content, err := os.ReadFile(file_name)
+	if err != nil {
+		log.Fatalf("Error: %v", err)
+	}
+	lines := strings.Split(string(content), "\n")
+
+	for _, line := range lines {
+		var newLines []string
+		lightsLastIndex := 0
+		joltageStartIndex := 0
+		for i, char := range line {
+			switch char {
+			case ']':
+				lightsLastIndex = i
+			case '{':
+				joltageStartIndex = i
+			}
+		}
+		newLines = append(newLines, line[1:lightsLastIndex], line[lightsLastIndex+1:joltageStartIndex], line[joltageStartIndex:])
+		res = append(res, newLines)
+	}
+	return res
+}
+
 func ReadInputSep(file_name string, separator string) []string {
 	content, err := os.ReadFile(file_name)
 	if err != nil {
