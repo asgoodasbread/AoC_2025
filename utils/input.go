@@ -10,10 +10,14 @@ import (
 
 func ReadDay10(file_name string) [][]string {
 	var res [][]string
-	content, err := os.ReadFile(file_name)
+	str, err := os.ReadFile(file_name)
 	if err != nil {
 		log.Fatalf("Error: %v", err)
 	}
+	content := string(str)
+	content = strings.ReplaceAll(content, "\r", "")
+
+	//fmt.Println(string(content))
 	lines := strings.Split(string(content), "\n")
 
 	for _, line := range lines {

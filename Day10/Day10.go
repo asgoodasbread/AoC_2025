@@ -15,8 +15,8 @@ type Machine struct {
 }
 
 func main() {
-	//part_1()
-	part_2()
+	part_1()
+	//part_2()
 }
 
 func part_2() {
@@ -30,6 +30,7 @@ func part_2() {
 
 func part_1() {
 	input := utils.ReadDay10("Day10/day10_input.txt")
+
 	machines := parseInput(input)
 	res := 0
 
