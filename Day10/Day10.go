@@ -15,17 +15,80 @@ type Machine struct {
 }
 
 func main() {
-	part_1()
-	//part_2()
+	//part_1()
+	part_2()
 }
 
 func part_2() {
 	input := utils.ReadDay10("Day10/test_input.txt")
 	machines := parseInput(input)
+	res := 0
 
 	for _, machine := range machines {
-		fmt.Println(machine)
+		memo := make(map[string]int)
+		res += minPresses(machine.buttons, machine.joltage, memo)
 	}
+	fmt.Println(res)
+}
+
+func key(target []int) string {
+	return fmt.Sprint(target)
+}
+
+func minPresses(buttons [][]int, target []int, memo map[string]int) int {
+	allZero := true
+	for _, v := range target {
+		if v != 0 {
+			allZero = false
+			break
+		}
+	}
+	if allZero {
+		return 0
+	}
+	k := key(target)
+	if val, ok := memo[k]; ok {
+		return val
+	}
+	n, m := len(buttons), len(target)
+	limit := 1 << n
+	best := -1
+	for mask := range limit {
+		remainder := make([]int, m)
+		copy(remainder, target)
+		costPhase1, poss := 0, true
+		for b := range n {
+			if (mask & (1 << b)) != 0 {
+				costPhase1++
+				for _, rowIdx := range buttons[b] {
+					if rowIdx < len(remainder) {
+						remainder[rowIdx]--
+					}
+				}
+			}
+		}
+		for i := range m {
+			if remainder[i] < 0 || remainder[i]%2 != 0 {
+				poss = false
+				break
+			}
+		}
+		if poss {
+			nextTarget := make([]int, m)
+			for i := range m {
+				nextTarget[i] = remainder[i] / 2
+			}
+			res := minPresses(buttons, nextTarget, memo)
+			if res != -1 {
+				totalCost := costPhase1 + 2*res
+				if best == -1 || totalCost < best {
+					best = totalCost
+				}
+			}
+		}
+	}
+	memo[k] = best
+	return best
 }
 
 func part_1() {

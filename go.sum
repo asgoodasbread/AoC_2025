@@ -1,2 +1,4 @@
+gonum.org/v1/exp v0.0.0-20250608173146-aaec753c4383 h1:Oqrr+6NQPQNRoLJWpiJp2X6uPh0+VdhTA9mFwVFFbsk=
+gonum.org/v1/exp v0.0.0-20250608173146-aaec753c4383/go.mod h1:8naXTU6eBmg5rnXQAQrGaZwCzGILkK8vNIU/vZMlZAk=
 gonum.org/v1/gonum v0.17.0 h1:VbpOemQlsSMrYmn7T2OUvQ4dqxQXU+ouZFQsZOx50z4=
 gonum.org/v1/gonum v0.17.0/go.mod h1:El3tOrEuMpv2UdMrbNlKEh9vd86bmQ6vqIcDwxEOc1E=
